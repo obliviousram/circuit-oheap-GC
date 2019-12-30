@@ -36,8 +36,11 @@ public abstract class TreeBasedOHeapParty<T> extends OHeapParty<T> {
 		T keysTiedFirstTimestampLess = lib.and(lib.eq(first.key, second.key), lib.leq(first.iden, second.iden));
 		T firstLeqSecond = lib.or(firstKeyLess, keysTiedFirstTimestampLess);
 		T pickFirst = lib.and(lib.or(firstLeqSecond, second.isDummy), lib.not(first.isDummy));
+		env.flush();
 		
-		return lib.mux(second, first, pickFirst);
+		Block<T> ret = lib.mux(second, first, pickFirst);
+		env.flush();
+		return ret;
 	}
 	
 	/**

@@ -16,7 +16,7 @@ import oheap.CircuitOHeap;
 
 //import gc.Boolean;
 
-public class TestCircuitOHeap {
+public class TestCircuitOHeapVerify {
 	final int N = 1 << 6;
 	final int capacity = 3;
 	int dataSize = 32;
@@ -25,10 +25,10 @@ public class TestCircuitOHeap {
 	int[] ops = new int[1000];
 	
 	public static void main(String[] args) throws Exception {
-		new TestCircuitOHeap().runThreads();
+		new TestCircuitOHeapVerify().runThreads();
 	}
 	
-	public TestCircuitOHeap() {
+	public TestCircuitOHeapVerify() {
 		SecureRandom rng = new SecureRandom();
 		
 		// run a large number of random operations on both the OHeap and a regular heap, comparing them

@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.concurrent.TimeUnit;
 
 import flexsc.CompEnv;
 import flexsc.Mode;
@@ -54,18 +55,22 @@ public class Network {
 	}
 
 	public byte[] readBytes(int len) {
+		//System.out.println("reading " + len);
 		byte[] temp = new byte[len];
 		try {
 			int remain = len;
 			while (0 < remain) {
 				int readBytes;
 
+				if (is.available() == 0) {
+					TimeUnit.MILLISECONDS.sleep(1);
+				}
 				readBytes = is.read(temp, len - remain, remain);
 				if (readBytes != -1) {
 					remain -= readBytes;
 				}
 			}
-		} catch (IOException e) {
+		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
@@ -73,18 +78,22 @@ public class Network {
 	}
 
 	public void readBytes(byte[] temp) {
+		//System.out.println("reading " + temp.length);
 		//		byte[] temp = new byte[len];
 		try {
 			int remain = temp.length;
 			while (0 < remain) {
 				int readBytes;
 
+				if (is.available() == 0) {
+					TimeUnit.MILLISECONDS.sleep(1);
+				}
 				readBytes = is.read(temp, temp.length - remain, remain);
 				if (readBytes != -1) {
 					remain -= readBytes;
 				}
 			}
-		} catch (IOException e) {
+		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
@@ -104,6 +113,7 @@ public class Network {
 
 	public void writeByte(byte[] data, int length) {
 		try {
+			//System.out.println("writing " + length);
 			os.write(data);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,6 +123,7 @@ public class Network {
 
 	public void writeByte(byte data) {
 		try {
+			//System.out.println("writing " + 1);
 			os.write(data);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

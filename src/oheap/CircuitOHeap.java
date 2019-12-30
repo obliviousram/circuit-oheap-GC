@@ -10,6 +10,7 @@ import util.Utils;
 public class CircuitOHeap<T> extends TreeBasedOHeapParty<T> {
 	public CircuitOHeapLib<T> lib;
 	Block<T>[] scQueue;
+	int cnt = 0;
 	public PlainBlock[] queue;
 	public int queueCapacity;
 	
@@ -25,8 +26,10 @@ public class CircuitOHeap<T> extends TreeBasedOHeapParty<T> {
 		return res;
 	}
 	
-	boolean[] randomPath() {
-		return Utils.tobooleanArray((Boolean[])lib.randBools(logN));
+	boolean[] nextPath() {
+		boolean[] ret = posToPath(cnt);
+		cnt = (cnt+1) % N;
+		return ret;
 	}
 
 	public CircuitOHeap(CompEnv<T> env, int N, int dataSize, int cap, int sp, boolean typeHidingSecurity) {
@@ -62,14 +65,8 @@ public class CircuitOHeap<T> extends TreeBasedOHeapParty<T> {
 	}
 
 	protected void ControlEviction() {
-		boolean[] randomPathOne = randomPath();
-		boolean[] randomPathTwo = randomPath();
-		// force the paths to be non-overlapping
-		randomPathOne[logN - 1] = true;
-		randomPathTwo[logN - 1] = false;
-		
-		flushOneTime(randomPathOne);
-		flushOneTime(randomPathTwo);
+		flushOneTime(nextPath());
+		flushOneTime(nextPath());
 	}
 	
 	public void flushOneTime(boolean[] pos) {
